@@ -281,7 +281,7 @@ function usual(&$out) {
 		}
 		@fclose($fp);		
 		
-		//echo date("Y-m-d H:i:s u")." Send ok\n";		
+		echo date("Y-m-d H:i:s u")." Send ok\n";		
 	}
  }
  
@@ -323,21 +323,30 @@ function usual(&$out) {
 				echo date("Y-m-d H:i:s u")."Request: Wrong data";
 				return false;
 			}
+			
+			echo date("Y-m-d H:i:s u")."Request: ok";
 		
 			foreach($data['sensors'] as $S) {
 				// Find propertys
 				$prop = false;
 				for($i=0;$i<$total;$i++)
+				{
 					if ($properties[$i]['DID'] == $S['id'])
 					{
 						$prop = $properties[$i];
 						break;
 					}
+				}
 					
 				if ($prop !== false)
 				{
 					// Set updated
-					$prop['UPDATED'] = date('Y-m-d H:i:s', $S['time']);
+					$prop['VALUE'] = $S['value'];
+					$prop['VALDATE'] = date('Y-m-d H:i:s', $S['time']);
+					$prop['UPDATED'] = date('Y-m-d H:i:s');
+					
+					//DebMes("ReadData: ".print_r($prop, true));
+					
 					SQLUpdate($table, $prop);
 					
 					// Set object value
@@ -394,6 +403,8 @@ nm_outdata -
  nm_indata: ID int(10) unsigned NOT NULL auto_increment
  nm_indata: DID int(10) NOT NULL
  nm_indata: TITLE varchar(100) NOT NULL DEFAULT ''
+ nm_indata: VALUE varchar(100)
+ nm_indata: VALDATE datetime
  nm_indata: UPDATED datetime
  nm_indata: LINKED_OBJECT varchar(100) NOT NULL DEFAULT ''
  nm_indata: LINKED_PROPERTY varchar(100) NOT NULL DEFAULT ''

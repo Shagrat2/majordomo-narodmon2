@@ -27,6 +27,8 @@
 <tr>
  <th>Id</th>
  <th><#LANG_TITLE#></th>
+ <th><#LANG_VALUE#></th>  
+ <th>Val Date</th>  
  <th><#LANG_UPDATED#></th>  
  <th>&nbsp;</th>
 </tr>
@@ -44,6 +46,20 @@
    [#TITLE#]
   </a></b>
  </td>
+ <td style="vertical-align:middle">
+  [#if VALUE!=""#]
+   [#VALUE#]
+  [#else#]
+   &nbsp;
+  [#endif#]
+ </td>  
+ <td style="vertical-align:middle">
+  [#if VALDATE!=""#]
+   [#VALDATE#]
+  [#else#]
+   &nbsp;
+  [#endif#]
+ </td>  
  <td style="vertical-align:middle">
   [#if UPDATED!=""#]
    [#UPDATED#]
