@@ -286,11 +286,11 @@ function usual(&$out) {
  }
  
  function readData() {
-	$this->getConfig(); 
+  $this->getConfig(); 
 	
-	$table='nm_indata';	
+  $table='nm_indata';	
   $properties=SQLSelect("SELECT * FROM $table;");
-	$total=count($properties);
+  $total=count($properties);
   if ($total) {
 		$sens = array();
 		for($i=0;$i<$total;$i++)
@@ -324,7 +324,7 @@ function usual(&$out) {
 				return false;
 			}
 			
-			echo date("Y-m-d H:i:s u")."Request: ok";
+			echo date("Y-m-d H:i:s u")." Request: ok\n";
 		
 			foreach($data['sensors'] as $S) {
 				// Find propertys
@@ -358,6 +358,52 @@ function usual(&$out) {
 		}
 	}
  }
+
+function readHistory($id, $period, $offset)
+{
+	$this->getConfig(); 
+
+	$request =
+		array( 
+			'cmd' => "sensorLog", 
+			'id' => $id,
+			'period' => $period,
+			'offset' => $offset,
+			'uuid' => md5("majordomo.smartliving.ru"), 
+			'api_key' => $this->config['API_KEY'] 			
+		);
+
+	if($ch = curl_init('http://narodmon.ru/api')) {
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
+		$reply = curl_exec($ch); 
+
+		if(!$reply or empty($reply)) 
+		{
+			echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply;
+			return false;
+		}
+
+		$data = json_decode($reply, true);
+		if(!$data or !is_array($data))
+		{
+			echo date("Y-m-d H:i:s u")."Request: Wrong data";
+			return false;
+		}
+
+		echo date("Y-m-d H:i:s u")." Request: ok\n";
+			
+		curl_close($ch); 
+
+		print_r($data);
+
+		return ($data);
+	}	
+
+	return false;
+}
  
 /**
 * Install
