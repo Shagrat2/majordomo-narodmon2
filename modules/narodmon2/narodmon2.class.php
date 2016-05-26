@@ -285,6 +285,34 @@ function usual(&$out) {
 	}
  }
  
+ function sendVals($vals){ 
+		$this->getConfig();
+ 
+	  $total=count($vals);
+		if ($total) {		
+			$send="#".$this->config['API_MAC'];
+			if ($this->config['SRV_NAME'])
+				$send.="#".$this->config['SRV_NAME'];
+			$send.="\n";
+			for($i=0;$i<$total;$i++)
+				$send.="#".$vals[$i]['MAC']."#".$vals[$i]['VALUE']."#".$vals[$i]['TITLE']."\n";
+			$send.="##";		
+		 
+			$fp = @fsockopen("tcp://narodmon.ru", 8283, $errno, $errstr);
+			if($fp) {
+			 fwrite($fp, $send);
+
+			 $result='';
+			 while (!feof($fp)) {
+				 $result.=fread($fp, 128);
+			 }
+			}
+			@fclose($fp);		
+
+			echo date("Y-m-d H:i:s u")." Send vals k\n";		
+		}	
+ }
+ 
  function readData() {
   $this->getConfig(); 
 	
