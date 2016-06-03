@@ -12,8 +12,11 @@ $ctl = new control_modules();
 include_once(DIR_MODULES . 'narodmon2/narodmon2.class.php');
 $narodmon2_module = new narodmon2();
 $narodmon2_module->getConfig();
-$tmp = SQLSelectOne("SELECT * FROM nm_outdata, nm_indata LIMIT 1");
-if (!$tmp['ID'])
+// In data
+$tmp1 = SQLSelectOne("SELECT ID FROM nm_outdata LIMIT 1");
+// Out data
+$tmp2 = SQLSelectOne("SELECT ID FROM nm_indata LIMIT 1");
+if ((!$tmp1['ID']) && (!$tmp2['ID']))
    exit; // no devices added -- no need to run this cycle
  
 echo date("H:i:s") . " running " . basename(__FILE__) . PHP_EOL;
