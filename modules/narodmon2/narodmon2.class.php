@@ -309,7 +309,7 @@ function usual(&$out) {
 			}
 			@fclose($fp);		
 
-			echo date("Y-m-d H:i:s u")." Send vals k\n";		
+			echo date("Y-m-d H:i:s u")." Send vals ok\n";		
 		}	
  }
  
@@ -341,14 +341,14 @@ function usual(&$out) {
 			
 			if(!$reply or empty($reply)) 
 			{
-				echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply;
+				echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply."\n";
 				return false;
 			}
 			
 			$data = json_decode($reply, true);
 			if(!$data or !is_array($data))
 			{
-				echo date("Y-m-d H:i:s u")."Request: Wrong data";
+				echo date("Y-m-d H:i:s u")."Request: Wrong data\n";
 				return false;
 			}
 			
@@ -364,6 +364,13 @@ function usual(&$out) {
 						$prop = $properties[$i];
 						break;
 					}
+				}
+				
+				// Skip ready has
+				if ($prop['VALDATE'] == date('Y-m-d H:i:s', $S['time']))
+				{
+					echo date("Y-m-d H:i:s u")." Skip prop for date: ".$prop['TITLE']."\n";
+					continue;
 				}
 					
 				if ($prop !== false)
@@ -410,14 +417,14 @@ function readHistory($id, $period, $offset)
 
 		if(!$reply or empty($reply)) 
 		{
-			echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply;
+			echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply."\n";
 			return false;
 		}
 
 		$data = json_decode($reply, true);
 		if(!$data or !is_array($data))
 		{
-			echo date("Y-m-d H:i:s u")."Request: Wrong data";
+			echo date("Y-m-d H:i:s u")."Request: Wrong data\n";
 			return false;
 		}
 
