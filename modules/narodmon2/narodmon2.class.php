@@ -281,7 +281,7 @@ function usual(&$out) {
 		}
 		@fclose($fp);		
 		
-		echo date("Y-m-d H:i:s u")." Send ok\n";		
+		echo date("Y-m-d H:i:s")." Send ok\n";		
 	}
  }
  
@@ -309,7 +309,7 @@ function usual(&$out) {
 			}
 			@fclose($fp);		
 
-			echo date("Y-m-d H:i:s u")." Send vals ok\n";		
+			echo date("Y-m-d H:i:s")." Send vals ok\n";		
 		}	
  }
  
@@ -341,18 +341,18 @@ function usual(&$out) {
 			
 			if(!$reply or empty($reply)) 
 			{
-				echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply."\n";
+				echo date("Y-m-d H:i:s")."Request: Connect error : ".$reply."\n";
 				return false;
 			}
 			
 			$data = json_decode($reply, true);
 			if(!$data or !is_array($data))
 			{
-				echo date("Y-m-d H:i:s u")."Request: Wrong data\n";
+				echo date("Y-m-d H:i:s")."Request: Wrong data\n";
 				return false;
 			}
 			
-			echo date("Y-m-d H:i:s u")." Request: ok\n";
+			echo date("Y-m-d H:i:s")." Request: ok\n";
 		
 			foreach($data['sensors'] as $S) {
 				// Find propertys
@@ -369,7 +369,7 @@ function usual(&$out) {
 				// Skip ready has
 				if ($prop['VALDATE'] == date('Y-m-d H:i:s', $S['time']))
 				{
-					echo date("Y-m-d H:i:s u")." Skip prop for date: ".$prop['TITLE']."\n";
+					echo date("Y-m-d H:i:s")." Skip prop for date: ".$prop['TITLE']."\n";
 					continue;
 				}
 					
@@ -417,18 +417,18 @@ function readHistory($id, $period, $offset)
 
 		if(!$reply or empty($reply)) 
 		{
-			echo date("Y-m-d H:i:s u")."Request: Connect error : ".$reply."\n";
+			echo date("Y-m-d H:i:s")."Request: Connect error : ".$reply."\n";
 			return false;
 		}
 
 		$data = json_decode($reply, true);
 		if(!$data or !is_array($data))
 		{
-			echo date("Y-m-d H:i:s u")."Request: Wrong data\n";
+			echo date("Y-m-d H:i:s")."Request: Wrong data\n";
 			return false;
 		}
 
-		echo date("Y-m-d H:i:s u")." Request: ok\n";
+		echo date("Y-m-d H:i:s")." Request: ok\n";
 			
 		curl_close($ch); 
 
@@ -468,7 +468,7 @@ function readHistory($id, $period, $offset)
 *
 * @access private
 */
- function dbInstall() {
+ function dbInstall($data) {
 /*
 nm_outdata - 
 */
