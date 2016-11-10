@@ -115,19 +115,28 @@ function admin(&$out) {
  $this->getConfig();
  
  $out['API_KEY']=$this->config['API_KEY'];
+ $out['UUID'] = $this->config['UUID'];
  $out['SRV_NAME']=$this->config['SRV_NAME'];
  $out['API_MAC']=$this->config['API_MAC'];
  $out['EVERY']=$this->config['EVERY'];
  
+ if (!$out['UUID']) {
+	 $out['UUID'] = md5(microtime() . rand(0, 9999));
+	 $this->config['UUID'] = $out['UUID'];
+	 $this->saveConfig();
+ }
+ 
  if ($this->view_mode=='update_settings') {    
-   global $api_key;
-   $this->config['API_KEY']=$api_key;
-	 global $srv_name;
-	 $this->config['SRV_NAME']=$srv_name;	 
-	 global $api_mac;
-	 $this->config['API_MAC']=$api_mac;
-	 global $every;
-	 $this->config['EVERY']=$every;
+	global $api_key;
+	$this->config['API_KEY']=$api_key;
+	global $uuid;
+	$this->config['UUID']=$uuid;
+	global $srv_name;
+	$this->config['SRV_NAME']=$srv_name;	 
+	global $api_mac;
+	$this->config['API_MAC']=$api_mac;
+	global $every;
+	$this->config['EVERY']=$every;
    
    $this->saveConfig();
    $this->redirect("?");
@@ -328,8 +337,8 @@ function usual(&$out) {
 			array( 
 				'cmd' => "sensorsValues", 
 				'sensors' => $sens,
-				'uuid' => md5("majordomo.smartliving.ru"), 
-				'api_key' => $this->config['API_KEY'] 			
+				'uuid' => md5($this->config['UUID']), 
+				'api_key' => $this->config['API_KEY']
 			);
 			
 		if($ch = curl_init('http://narodmon.ru/api')) {
