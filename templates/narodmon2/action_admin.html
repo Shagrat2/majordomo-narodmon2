@@ -48,18 +48,6 @@
  <div class="controls"><input type="text" name="srv_name" value="[#SRV_NAME#]" class="input"> <#LANG_NAME_INFO#></div>
 </div>
 <div class="form-group">
- <label class="control-label"[#if ERR_API_KEY#] style="color:red;font-weight:bold"[#endif#]>
- API KEY:<span style="color:red">(*)</span>
- </label>
- <div class="controls"><input type="text" name="api_key" value="[#API_KEY#]" class="input"> <#LANG_API_KEY_INFO#></div>
-</div>
-<div class="form-group">
- <label class="control-label"[#if ERR_UUID#] style="color:red;font-weight:bold"[#endif#]>
- UUID:<span style="color:red">(*)</span>
- </label>
- <div class="controls"><input type="text" name="uuid" value="[#UUID#]" class="input"> <#LANG_UUID_INFO#></div>
-</div>
-<div class="form-group">
  <label class="control-label">
  <#LANG_AUTO_UPDATE_PERIOD#>:(*)
  </label>
@@ -77,7 +65,6 @@
 <div class="form-group">
   <div class="controls">
 	  <span style="color:blue">(*)</span> - <#LANG_FOR_OUTDATA#><br/>
-	  <span style="color:red">(*)</span> - <#LANG_FOR_INDATA#>
 	</div>	
 </div>
 <div class="form-actions">

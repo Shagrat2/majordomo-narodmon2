@@ -21,6 +21,7 @@ function narodmon2() {
   $this->title="NarodMon.ru";
   $this->module_category="<#LANG_SECTION_APPLICATIONS#>";
   $this->checkInstalled();
+  $this->API_KEY = "35uRe2lIkUUPY"; // Module Key
 }
 /**
 * saveParams
@@ -114,7 +115,6 @@ function run() {
 function admin(&$out) {
  $this->getConfig();
  
- $out['API_KEY']=$this->config['API_KEY'];
  $out['UUID'] = $this->config['UUID'];
  $out['SRV_NAME']=$this->config['SRV_NAME'];
  $out['API_MAC']=$this->config['API_MAC'];
@@ -126,11 +126,7 @@ function admin(&$out) {
 	 $this->saveConfig();
  }
  
- if ($this->view_mode=='update_settings') {    
-	global $api_key;
-	$this->config['API_KEY']=$api_key;
-	global $uuid;
-	$this->config['UUID']=$uuid;
+ if ($this->view_mode=='update_settings') {
 	global $srv_name;
 	$this->config['SRV_NAME']=$srv_name;	 
 	global $api_mac;
@@ -337,8 +333,8 @@ function usual(&$out) {
 			array( 
 				'cmd' => "sensorsValues", 
 				'sensors' => $sens,
-				'uuid' => md5($this->config['UUID']), 
-				'api_key' => $this->config['API_KEY']
+				'uuid' => $this->config['UUID'],
+				'api_key' => $this->API_KEY
 			);
 			
 		if($ch = curl_init('http://narodmon.ru/api')) {
@@ -413,8 +409,8 @@ function readHistory($id, $period, $offset)
 			'id' => $id,
 			'period' => $period,
 			'offset' => $offset,
-			'uuid' => md5("majordomo.smartliving.ru"), 
-			'api_key' => $this->config['API_KEY'] 			
+			'uuid' => $this->config['UUID'],
+			'api_key' => $this->API_KEY
 		);
 
 	if($ch = curl_init('http://narodmon.ru/api')) {
