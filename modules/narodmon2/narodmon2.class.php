@@ -255,34 +255,34 @@ function usual(&$out) {
  }
 
  function sendData() {
-  $this->getConfig();
+	$this->getConfig();
 
 	$table='nm_outdata';
-  $properties=SQLSelect("SELECT * FROM $table WHERE active=1;");
+	$properties=SQLSelect("SELECT * FROM $table WHERE active=1;");
 	$total=count($properties);
-  if ($total) {
+	if ($total) {
 		$send="#".$this->config['API_MAC'];
 		if ($this->config['SRV_NAME'])
 			$send.="#".$this->config['SRV_NAME'];
-		$send.="\n";
-    for($i=0;$i<$total;$i++){
-			$val = round( getGlobal($properties[$i]['LINKED_OBJECT'].'.'.$properties[$i]['LINKED_PROPERTY']), 2);
-			
-			$send.="#".$properties[$i]['MAC']."#".$val."#".$properties[$i]['TITLE']."\n";
-			
-			$properties[$i]['UPDATED'] = date('Y-m-d H:i:s');
-			SQLUpdate($table, $properties[$i]);
-		}
-	  $send.="##";
+			$send.="\n";
+			for($i=0;$i<$total;$i++){
+				$val = round( getGlobal($properties[$i]['LINKED_OBJECT'].'.'.$properties[$i]['LINKED_PROPERTY']), 2);
+				
+				$send.="#".$properties[$i]['MAC']."#".$val."#".$properties[$i]['TITLE']."\n";
+				
+				$properties[$i]['UPDATED'] = date('Y-m-d H:i:s');
+				SQLUpdate($table, $properties[$i]);
+			}
+		$send.="##";
 
 		$fp = @fsockopen("tcp://narodmon.ru", 8283, $errno, $errstr);
 		if($fp) {
-		 fwrite($fp, $send);
+			fwrite($fp, $send);
 
-		 $result='';
-		 while (!feof($fp)) {
-			 $result.=fread($fp, 128);
-		 }
+			$result='';
+			while (!feof($fp)) {
+				$result.=fread($fp, 128);
+			}
 		}
 		@fclose($fp);		
 		
@@ -319,12 +319,12 @@ function usual(&$out) {
  }
  
  function readData() {
-  $this->getConfig(); 
-	
-  $table='nm_indata';	
-  $properties=SQLSelect("SELECT * FROM $table;");
-  $total=count($properties);
-  if ($total) {
+	$this->getConfig(); 
+
+	$table='nm_indata';	
+	$properties=SQLSelect("SELECT * FROM $table;");
+	$total=count($properties);
+	if ($total) {
 		$sens = array();
 		for($i=0;$i<$total;$i++)
 			$sens[] = $properties[$i]['DID'];
@@ -341,6 +341,7 @@ function usual(&$out) {
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_USERAGENT, 'MajorDomo module');
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
 			$reply = curl_exec($ch); 
 			
@@ -417,6 +418,7 @@ function readHistory($id, $period, $offset)
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'MajorDomo module');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
 		$reply = curl_exec($ch); 
 
