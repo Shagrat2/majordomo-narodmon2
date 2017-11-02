@@ -243,14 +243,20 @@ function usual(&$out) {
  }
  function processCycle() {
    $this->getConfig();
-	 
+
    $every=$this->config['EVERY'];
-   if ((time()-$this->config['LATEST_UPDATE'])>$every*60) {     
-     $this->sendData();
-		 $this->readData();
+   $tdev = time()-$this->config['LATEST_UPDATE'];
+   $has = $tdev>$every*60;
+   if ($tdev < 0) {
+		$has = true;
+   }
+   
+   if ($has) {     
+	$this->sendData();
+	$this->readData();
 		 
-		 $this->config['LATEST_UPDATE']=time();
-		 $this->saveConfig();
+	$this->config['LATEST_UPDATE']=time();
+	$this->saveConfig();
    } 
  }
 
