@@ -1,6 +1,16 @@
-<div class="float-right">
-	<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about">About&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
-	</button>
+[#if VIEW_MODE="outdata_edit"#]	
+	[#inc outdata_edit.html#]
+[#else#]
+[#if VIEW_MODE="indata_edit"#]	
+	[#inc indata_edit.html#]
+[#else#]
+<div>
+	NarodMon.ru
+	<a class="btn btn-primary" href="#" onClick="$('#api_settings').toggle();return false;"><#LANG_SETUP#></a>
+	<a class="btn btn-default" href="?data_source=<#DATA_SOURCE#>&view_mode=test&tab="><#LANG_TEST#></a> 
+	<div class="float-right">
+		<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about">About&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
+	</div>
 </div>
 
 <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about1" aria-hidden="true">
@@ -13,9 +23,12 @@
 			</div>
 			<div class="modal-body">
 				<p> Module supported NarodMon.ru<br>
-				<a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=2951" target="_blank">Forum</a>.<br>
+					<a href="http://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=2951" target="_blank">Forum</a>.<br>
 				</p>
-				<p class="float-left"></p>
+				<p class="float-left">Поддержать автора материально:<br>
+					Yandex: 410016722116303<br>					
+					PayPal: ivan@jad.ru<br>
+				</p>
 			</div>
 			
 			<div class="modal-footer">
@@ -26,63 +39,49 @@
 	</div>
 </div>
 
-<div>
- NarodMon.ru
- &nbsp;&nbsp;<a class="btn btn-default" href="#" onClick="$('#api_settings').toggle();return false;"><#LANG_SETUP#></a>
- &nbsp;&nbsp;<a class="btn btn-default" href="?data_source=<#DATA_SOURCE#>&view_mode=test&tab="><#LANG_TEST#></a>
- &nbsp; 
-</div>
-
 <div style="display:none" id='api_settings'>
-&nbsp;
-<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
-<fieldset>
-<div class="form-group">
- <label class="control-label"[#if ERR_API_MAC#] style="color:red;font-weight:bold"[#endif#]>MAC:<span style="color:blue">(*)</span></label>
- <div class="controls"><input type="text" name="api_mac" value="[#API_MAC#]" class="input"> <#LANG_MAC_INFO#>
-   <p class="text-muted"><br/><#LANG_MAC_TEXT#></p>
- </div>
+	<br>
+	<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+	  <fieldset>
+		<div class="form-group">
+		 <label class="control-label"[#if ERR_API_MAC#] style="color:red;font-weight:bold"[#endif#]>MAC:<span style="color:blue">(*)</span></label>
+		 <div class="controls"><input type="text" name="api_mac" value="[#API_MAC#]" class="input"> <#LANG_MAC_INFO#>
+		   <p class="form-text text-muted col-md-10"><br/><#LANG_MAC_TEXT#></p>
+		 </div>
+		</div>
+		<div class="form-group">
+		 <label class="control-label"><#LANG_NAME#>:</label>
+		 <div class="controls"><input type="text" name="srv_name" value="[#SRV_NAME#]" class="input"> <#LANG_NAME_INFO#></div>
+		</div>
+		<div class="form-group">
+		 <label class="control-label">
+		 <#LANG_AUTO_UPDATE_PERIOD#>:(*)
+		 </label>
+		 <div class="controls">
+			<select name="every" class="input">
+				<option[#if EVERY="5"#] selected[#endif#]>5
+				<option[#if EVERY="10"#] selected[#endif#]>10
+				<option[#if EVERY="15"#] selected[#endif#]>15
+				<option[#if EVERY="20"#] selected[#endif#]>20
+				<option[#if EVERY="30"#] selected[#endif#]>30
+				<option[#if EVERY="60"#] selected[#endif#]>60
+			 </select> минут 
+		 </div>
+		</div>
+		<div class="form-group">
+		  <div class="controls">
+			<span style="color:blue">(*)</span> - <#LANG_FOR_OUTDATA#><br/>
+		  </div>	
+		</div>
+		<div class="form-actions">
+		  <button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
+		  <input type="hidden" name="view_mode" value="update_settings">
+		  <input type="hidden" name="mode" value="update">
+		</div>
+	  </fieldset>
+	</form>
 </div>
-<div class="form-group">
- <label class="control-label"><#LANG_NAME#>:</label>
- <div class="controls"><input type="text" name="srv_name" value="[#SRV_NAME#]" class="input"> <#LANG_NAME_INFO#></div>
-</div>
-<div class="form-group">
- <label class="control-label">
- <#LANG_AUTO_UPDATE_PERIOD#>:(*)
- </label>
- <div class="controls">
-		<select name="every" class="input span2">
-			<option[#if EVERY="5"#] selected[#endif#]>5
-			<option[#if EVERY="10"#] selected[#endif#]>10
-			<option[#if EVERY="15"#] selected[#endif#]>15
-			<option[#if EVERY="20"#] selected[#endif#]>20
-			<option[#if EVERY="30"#] selected[#endif#]>30
-			<option[#if EVERY="60"#] selected[#endif#]>60
-		 </select> минут 
- </div>
-</div>
-<div class="form-group">
-  <div class="controls">
-	  <span style="color:blue">(*)</span> - <#LANG_FOR_OUTDATA#><br/>
-	</div>	
-</div>
-<div class="form-actions">
-<button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
-<input type="hidden" name="view_mode" value="update_settings">
-<input type="hidden" name="mode" value="update">
-</div>
-</fieldset>
-</form>
-</div>
-
-<br/>
-[#if VIEW_MODE="outdata_edit"#]	
-	[#inc outdata_edit.html#]
-[#else#]
-[#if VIEW_MODE="indata_edit"#]	
-	[#inc indata_edit.html#]
-[#else#]
+<p>[#module name="xray" action="service" cycle="narodmon2"#]</p>
 <ul class="nav nav-tabs">
   <li[#if TAB=""#] class="active"[#endif#]>
    <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab="><#LANG_SEND#></a>

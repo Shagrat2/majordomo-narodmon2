@@ -242,22 +242,19 @@ function usual(&$out) {
    }
  }
  function processCycle() {
-   $this->getConfig();
+	$this->getConfig();
 
-   $every=$this->config['EVERY'];
-   $tdev = time()-$this->config['LATEST_UPDATE'];
-   $has = $tdev>$every*60;
-   if ($tdev < 0) {
-		$has = true;
-   }
+	$every = $this->config['EVERY'];
+	$last  = $this->config['LATEST_UPDATE'];
+	
+	$tdev = time()-$last;   
+	if ($tdev > $every*60) {
+		$this->config['LATEST_UPDATE']=time();
+		$this->saveConfig();
    
-   if ($has) {     
-	$this->sendData();
-	$this->readData();
-		 
-	$this->config['LATEST_UPDATE']=time();
-	$this->saveConfig();
-   } 
+		$this->sendData();
+		$this->readData();
+	} 
  }
 
  function sendData() {
