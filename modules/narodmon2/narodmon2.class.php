@@ -118,6 +118,8 @@ function admin(&$out) {
  $out['UUID'] = $this->config['UUID'];
  $out['SRV_NAME']=$this->config['SRV_NAME'];
  $out['API_MAC']=$this->config['API_MAC'];
+ $out['LOGIN']=$this->config['LOGIN'];
+ $out['PASSWORD']=$this->config['PASSWORD'];
  $out['EVERY']=$this->config['EVERY'];
  
  if (!$out['UUID']) {
@@ -131,10 +133,17 @@ function admin(&$out) {
 	$this->config['SRV_NAME']=$srv_name;	 
 	global $api_mac;
 	$this->config['API_MAC']=$api_mac;
+	global $narodmon_login;
+	$this->config['LOGIN']=$narodmon_login;
+	global $narodmon_password;
+	if($narodmon_password != $this->config['PASSWORD']){
+	$this->config['PASSWORD']=md5($this->config['UUID'] . md5($narodmon_password));
+	}
 	global $every;
 	$this->config['EVERY']=$every;
    
    $this->saveConfig();
+   $this->Logon();
    $this->redirect("?");
  }
  if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
@@ -149,6 +158,7 @@ function admin(&$out) {
  }
  if ($this->view_mode=='test') {
 		$this->sendData();
+		$this->Logon();
 		$this->readData();
 		$this->redirect("?");
  }
@@ -322,7 +332,7 @@ function usual(&$out) {
  }
  
  function readData() {
-	$this->getConfig(); 
+	$this->getConfig();
 
 	$table='nm_indata';	
 	$properties=SQLSelect("SELECT * FROM $table;");
@@ -402,6 +412,53 @@ function usual(&$out) {
 		}
 	}
  }
+ 
+ function Logon()
+{
+	$this->getConfig(); 
+
+	$request =
+		array( 
+			'cmd' => "userLogon", 
+			'login' => $this->config['LOGIN'],
+			'hash' => $this->config['PASSWORD'],
+			'uuid' => $this->config['UUID'],
+			'api_key' => $this->API_KEY,
+			'lang' => "ru"
+		);
+
+	if($ch = curl_init('http://narodmon.ru/api')) {
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'MajorDomo module');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
+		$reply = curl_exec($ch);
+
+		if(!$reply or empty($reply)) 
+		{
+			echo date("Y-m-d H:i:s")."Request: Connect error : ".$reply."\n";
+			return false;
+		}
+
+		$data = json_decode($reply, true);
+		if(!$data or !is_array($data))
+		{
+			echo date("Y-m-d H:i:s")."Request: Wrong data\n";
+			return false;
+		}
+
+		echo date("Y-m-d H:i:s")." Request: ok\n";
+			
+		curl_close($ch); 
+
+		print_r($data);
+
+		return ($data);
+	}	
+
+	return false;
+}
 
 function readHistory($id, $period, $offset)
 {

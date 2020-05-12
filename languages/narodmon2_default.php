@@ -10,6 +10,7 @@ $dictionary=array(
 'MAC_INFO'=>'The unique serial number of the device monitoring.',
 'MAC_TEXT'=>"Designed to identify the device in the project and anchor it to the owner and to the map section sensors. It consists of 12-18 characters A-Z, and 0-9 are sometimes separated by '-' or ':'. To ensure the uniqueness of it is recommended to use the MAC-address of the network interface of your DEVICE monitor or a computer that can learn by doing getmac or ipconfig command prompt in Windows and ifconfig on Linux. Allowed to bind multiple Devices in different MAC to the same owner.",
 'NAME_INFO'=>"The name of the monitoring devices (not required)",
+'LOGIN_INFO'=>"Login from the site to access private sensors (optional)",
 'FOR_OUTDATA'=>"For transmission",
 'FOR_INDATA'=>"For receive",
 'RECEIVE'=>"Receive",
